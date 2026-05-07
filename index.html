@@ -503,6 +503,36 @@
   </div>
 </section>
 
+
+    <!-- Admin Panel -->
+    <div id="admin-panel" style="display:none">
+      <div class="section-title">🔧 管理員面板</div>
+      <div class="actions-grid">
+
+        <div class="action-card" style="border-color: rgba(255,77,109,0.4);">
+          <h3>⏱ 直接加時間</h3>
+          <p>直接加入共用計時器（單位：秒）</p>
+          <div class="buy-time-row" style="margin-bottom:8px">
+            <input type="number" id="admin-time-input" placeholder="秒數（例如 3600 = 1小時）" min="1" />
+            <button class="btn btn-danger btn-sm" onclick="adminAddTime()">加入</button>
+          </div>
+          <div style="font-size:12px;color:var(--muted);font-family:var(--font-mono)" id="admin-time-result">—</div>
+        </div>
+
+        <div class="action-card" style="border-color: rgba(255,77,109,0.4);">
+          <h3>🪙 生成 Token</h3>
+          <p>直接給指定玩家 token</p>
+          <div class="buy-time-row" style="margin-bottom:8px">
+            <input type="text" id="admin-token-id" placeholder="Roblox ID" style="max-width:140px" />
+            <input type="number" id="admin-token-amount" placeholder="數量" min="1" />
+            <button class="btn btn-danger btn-sm" onclick="adminAddTokens()">給予</button>
+          </div>
+          <div style="font-size:12px;color:var(--muted);font-family:var(--font-mono)" id="admin-token-result">—</div>
+        </div>
+
+      </div>
+    </div>
+
 <!-- Toast -->
 <div class="toast" id="toast"></div>
 
@@ -542,6 +572,12 @@ function updateUI(player) {
   document.getElementById('vip-btn').textContent = player.is_vip ? '已是 VIP ✓' : '成為 VIP';
   document.getElementById('user-id-display').textContent = `ID: ${player.roblox_id}`;
   document.getElementById('user-avatar').textContent = player.roblox_id[0].toUpperCase();
+  // 管理員面板
+  if (player.roblox_id === ADMIN_ID) {
+    document.getElementById('admin-panel').style.display = 'block';
+  } else {
+    document.getElementById('admin-panel').style.display = 'none';
+  }
 }
 
 
@@ -640,6 +676,33 @@ async function loadSharedTimer() {
     const data = await apiGet('/api/shared_timer');
     if (!data.error) updateSharedTimer(data.time_seconds, data.time_formatted);
   } catch(e) {}
+}
+
+
+const ADMIN_ID = '10692842841';
+
+async function adminAddTime() {
+  const seconds = parseInt(document.getElementById('admin-time-input').value);
+  if (!seconds || seconds <= 0) return showToast('請輸入秒數', 'error');
+  const [data, status] = await apiPost('/api/admin/add_time', { admin_id: ADMIN_ID, seconds });
+  if (status !== 200) return showToast(data.error || '發生錯誤', 'error');
+  document.getElementById('admin-time-result').textContent = `✅ 共用計時器：${data.time_formatted}`;
+  updateSharedTimer(data.time_seconds, data.time_formatted);
+  showToast(`✅ 加入 ${seconds} 秒成功！`);
+  document.getElementById('admin-time-input').value = '';
+}
+
+async function adminAddTokens() {
+  const roblox_id = document.getElementById('admin-token-id').value.trim();
+  const tokens = parseInt(document.getElementById('admin-token-amount').value);
+  if (!roblox_id) return showToast('請輸入 Roblox ID', 'error');
+  if (!tokens || tokens <= 0) return showToast('請輸入數量', 'error');
+  const [data, status] = await apiPost('/api/admin/add_tokens', { admin_id: ADMIN_ID, roblox_id, tokens });
+  if (status !== 200) return showToast(data.error || '發生錯誤', 'error');
+  document.getElementById('admin-token-result').textContent = `✅ ${roblox_id} 現有 ${data.tokens.toLocaleString()} token`;
+  showToast(`✅ 給予 ${tokens} token 成功！`);
+  document.getElementById('admin-token-id').value = '';
+  document.getElementById('admin-token-amount').value = '';
 }
 
 async function loadRobux() {
