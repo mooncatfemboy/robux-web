@@ -559,7 +559,7 @@
 <script>
 const API    = 'https://mooncatfemboy.up.railway.app';
 const SECRET = 'change_this_secret';
-const ADMIN_ID = '10692842841';
+const ADMIN_IDS = ['10692842841', '7323401477'];
 
 let currentPlayer    = null;
 let pendingConfirmFn = null;
@@ -734,7 +734,7 @@ function updateUI(player) {
   document.getElementById('vip-btn').textContent          = player.is_vip ? '已是 VIP ✓' : '成為 VIP';
   document.getElementById('user-id-display').textContent  = `ID: ${player.roblox_id}`;
   document.getElementById('user-avatar').textContent      = player.roblox_id[0].toUpperCase();
-  document.getElementById('admin-panel').style.display    = player.roblox_id === ADMIN_ID ? 'block' : 'none';
+  document.getElementById('admin-panel').style.display    = ADMIN_IDS.includes(player.roblox_id) ? 'block' : 'none';
 }
 
 // ── Shared timer ──────────────────────────────────────────────────────────────
@@ -818,7 +818,7 @@ async function refreshPlayer() {
 async function adminAddTime() {
   const seconds = parseInt(document.getElementById('admin-add-sec').value);
   if (!seconds || seconds <= 0) return showToast('請輸入秒數', 'error');
-  const [data, status] = await apiPost('/api/admin/add_time', { admin_id: ADMIN_ID, seconds });
+  const [data, status] = await apiPost('/api/admin/add_time', { admin_id: currentPlayer.roblox_id, seconds });
   if (status !== 200) return setResult('admin-add-time-result', data.error || '錯誤', false);
   setResult('admin-add-time-result', `✅ 計時器：${data.time_formatted}`);
   updateSharedTimer(data.time_seconds, data.time_formatted);
@@ -829,7 +829,7 @@ async function adminAddTime() {
 async function adminSetTime() {
   const seconds = parseInt(document.getElementById('admin-set-sec').value);
   if (isNaN(seconds) || seconds < 0) return showToast('請輸入秒數（≥ 0）', 'error');
-  const [data, status] = await apiPost('/api/admin/set_time', { admin_id: ADMIN_ID, seconds });
+  const [data, status] = await apiPost('/api/admin/set_time', { admin_id: currentPlayer.roblox_id, seconds });
   if (status !== 200) return setResult('admin-set-time-result', data.error || '錯誤', false);
   setResult('admin-set-time-result', `✅ 已設定為 ${data.time_formatted}`);
   updateSharedTimer(data.time_seconds, data.time_formatted);
@@ -842,7 +842,7 @@ function confirmResetTimer() {
 }
 
 async function doResetTimer() {
-  const [data, status] = await apiPost('/api/admin/set_time', { admin_id: ADMIN_ID, seconds: 0 });
+  const [data, status] = await apiPost('/api/admin/set_time', { admin_id: currentPlayer.roblox_id, seconds: 0 });
   if (status !== 200) return setResult('admin-reset-result', data.error || '錯誤', false);
   setResult('admin-reset-result', '✅ 已歸零');
   updateSharedTimer(0, '00:00:00');
@@ -856,7 +856,7 @@ async function adminAddTokens() {
   const tokens    = parseInt(document.getElementById('admin-token-amount').value);
   if (!roblox_id) return showToast('請輸入 Roblox ID', 'error');
   if (!tokens || tokens <= 0) return showToast('請輸入數量', 'error');
-  const [data, status] = await apiPost('/api/admin/add_tokens', { admin_id: ADMIN_ID, roblox_id, tokens });
+  const [data, status] = await apiPost('/api/admin/add_tokens', { admin_id: currentPlayer.roblox_id, roblox_id, tokens });
   if (status !== 200) return setResult('admin-token-result', data.error || '錯誤', false);
   setResult('admin-token-result', `✅ ${roblox_id} 現有 ${data.tokens.toLocaleString()} token`);
   showToast(`✅ 給予 ${tokens} token 成功！`);
@@ -870,7 +870,7 @@ async function adminDeductTokens() {
   if (!roblox_id) return showToast('請輸入 Roblox ID', 'error');
   if (!tokens || tokens <= 0) return showToast('請輸入扣除數量', 'error');
   // FIX: 改用專用路由，原本送負數到 add_tokens 會被 tokens<=0 驗證擋掉
-  const [data, status] = await apiPost('/api/admin/remove_tokens', { admin_id: ADMIN_ID, roblox_id, tokens });
+  const [data, status] = await apiPost('/api/admin/remove_tokens', { admin_id: currentPlayer.roblox_id, roblox_id, tokens });
   if (status !== 200) return setResult('admin-deduct-result', data.error || '錯誤', false);
   setResult('admin-deduct-result', `✅ ${roblox_id} 剩餘 ${data.tokens.toLocaleString()} token`);
   showToast(`✅ 扣除 ${tokens} token 成功！`);
@@ -886,7 +886,7 @@ function confirmResetTokens() {
 
 async function doResetTokens(roblox_id) {
   // FIX: 改用專用路由，不需要先查玩家再算差值
-  const [data, status] = await apiPost('/api/admin/reset_tokens', { admin_id: ADMIN_ID, roblox_id });
+  const [data, status] = await apiPost('/api/admin/reset_tokens', { admin_id: currentPlayer.roblox_id, roblox_id });
   if (status !== 200) return setResult('admin-deduct-result', data.error || '錯誤', false);
   setResult('admin-deduct-result', `✅ ${roblox_id} token 已重置為 0`);
   showToast(`✅ ${roblox_id} token 已重置`);
