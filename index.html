@@ -296,6 +296,32 @@
   .confirm-box p  { font-size: 13px; color: var(--muted); margin-bottom: 24px; }
   .confirm-btns  { display: flex; gap: 12px; }
   .confirm-btns .btn { flex: 1; }
+
+  /* Admin password modal */
+  .admin-pw-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.75);
+    z-index: 600; display: none; align-items: center; justify-content: center;
+  }
+  .admin-pw-overlay.show { display: flex; }
+  .admin-pw-box {
+    background: var(--card); border: 1px solid var(--accent);
+    border-radius: 20px; padding: 40px; max-width: 380px; width: 90%; text-align: center;
+  }
+  .admin-pw-box .icon { font-size: 40px; margin-bottom: 12px; }
+  .admin-pw-box h3 { font-size: 20px; font-weight: 800; margin-bottom: 8px; }
+  .admin-pw-box p  { font-size: 13px; color: var(--muted); margin-bottom: 20px; }
+  .admin-pw-box input {
+    width: 100%; background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 14px 16px; color: var(--text);
+    font-family: var(--font-mono); font-size: 14px; outline: none;
+    transition: border-color 0.2s; margin-bottom: 12px; text-align: center;
+    letter-spacing: 2px;
+  }
+  .admin-pw-box input:focus { border-color: var(--accent); }
+  .admin-pw-status { font-size: 13px; min-height: 18px; margin-bottom: 12px; font-family: var(--font-mono); }
+  .admin-pw-status.err { color: var(--red); }
+  .admin-pw-btns { display: flex; gap: 10px; }
+  .admin-pw-btns .btn { flex: 1; }
 </style>
 </head>
 <body>
@@ -542,6 +568,21 @@
   </div>
 </section>
 
+<!-- Admin password modal -->
+<div class="admin-pw-overlay" id="admin-pw-overlay">
+  <div class="admin-pw-box">
+    <div class="icon">🔐</div>
+    <h3>管理員驗證</h3>
+    <p>請輸入管理員密碼才能進入面板</p>
+    <input type="password" id="admin-pw-input" placeholder="輸入密碼" autocomplete="off" />
+    <div class="admin-pw-status" id="admin-pw-status"></div>
+    <div class="admin-pw-btns">
+      <button class="btn btn-secondary" onclick="cancelAdminPw()">取消</button>
+      <button class="btn btn-primary" id="admin-pw-btn" onclick="submitAdminPw()">確認</button>
+    </div>
+  </div>
+</div>
+
 <!-- Confirm dialog -->
 <div class="confirm-overlay" id="confirm-overlay">
   <div class="confirm-box">
@@ -561,6 +602,7 @@
 const API    = 'https://mooncatfemboy.up.railway.app';
 const SECRET = 'change_this_secret';
 const ADMIN_IDS = ['10692842841', '7323401477'];
+let adminVerified = false; // 管理員密碼已驗證
 
 let currentPlayer    = null;
 let pendingConfirmFn = null;
@@ -715,7 +757,8 @@ async function login() {
 }
 
 function logout() {
-  currentPlayer = null;
+  currentPlayer   = null;
+  adminVerified   = false;
   document.getElementById('dashboard-section').style.display = 'none';
   document.getElementById('login-section').style.display = 'flex';
   document.getElementById('roblox-id-input').value = '';
@@ -735,14 +778,24 @@ function updateUI(player) {
   document.getElementById('vip-btn').textContent          = player.is_vip ? '已是 VIP ✓' : '成為 VIP';
   document.getElementById('user-id-display').textContent  = `ID: ${player.roblox_id}`;
   document.getElementById('user-avatar').textContent      = player.roblox_id[0].toUpperCase();
-  document.getElementById('admin-panel').style.display    = ADMIN_IDS.includes(player.roblox_id) ? 'block' : 'none';
+  // 管理員面板：需要密碼驗證才顯示
+  if (ADMIN_IDS.includes(player.roblox_id)) {
+    if (adminVerified) {
+      document.getElementById('admin-panel').style.display = 'block';
+    } else {
+      document.getElementById('admin-panel').style.display = 'none';
+      showAdminPwModal();
+    }
+  } else {
+    document.getElementById('admin-panel').style.display = 'none';
+  }
 }
 
 // ── Shared timer ──────────────────────────────────────────────────────────────
 
 function updateSharedTimer(seconds, formatted) {
   const el = document.getElementById('shared-timer-display');
-  el.textContent = formatted || fmtSeconds(seconds || 0);
+  el.textContent = formatted || fmtSeconds(Math.max(0, seconds || 0));
   if (seconds <= 0)        el.style.color = 'var(--red)';
   else if (seconds <= 300) el.style.color = '#ff9800';
   else if (seconds <= 600) el.style.color = 'var(--gold)';
@@ -974,6 +1027,63 @@ async function loadRobux() {
   } catch {}
 }
 
+// ── Admin password modal ─────────────────────────────────
+
+function showAdminPwModal() {
+  document.getElementById('admin-pw-input').value = '';
+  document.getElementById('admin-pw-status').textContent = '';
+  document.getElementById('admin-pw-status').className = 'admin-pw-status';
+  document.getElementById('admin-pw-overlay').classList.add('show');
+  setTimeout(() => document.getElementById('admin-pw-input').focus(), 100);
+}
+
+function cancelAdminPw() {
+  document.getElementById('admin-pw-overlay').classList.remove('show');
+  // 密碼取消就登出
+  logout();
+}
+
+async function submitAdminPw() {
+  const password = document.getElementById('admin-pw-input').value;
+  const statusEl = document.getElementById('admin-pw-status');
+  const btn      = document.getElementById('admin-pw-btn');
+  if (!password) return;
+
+  btn.disabled = true;
+  btn.textContent = '驗證中…';
+  statusEl.textContent = '';
+  statusEl.className = 'admin-pw-status';
+
+  try {
+    const [data, status] = await apiPost('/api/admin/verify', {
+      roblox_id: currentPlayer.roblox_id,
+      password
+    });
+    if (status !== 200) {
+      statusEl.textContent = data.error || '密碼錯誤';
+      statusEl.className = 'admin-pw-status err';
+      document.getElementById('admin-pw-input').value = '';
+      return;
+    }
+    // 驗證成功
+    adminVerified = true;
+    document.getElementById('admin-pw-overlay').classList.remove('show');
+    document.getElementById('admin-panel').style.display = 'block';
+    showToast('✅ 管理員驗證成功！');
+  } catch {
+    statusEl.textContent = '連線失敗';
+    statusEl.className = 'admin-pw-status err';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '確認';
+  }
+}
+
+// Enter key on password input
+document.getElementById('admin-pw-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') submitAdminPw();
+});
+
 // ── WebSocket 即時計時器 ──────────────────────────────────
 const socket = io(API, {
   transports: ['websocket', 'polling'],
@@ -987,7 +1097,18 @@ socket.on('connect', () => {
 
 socket.on('timer_update', (data) => {
   updateSharedTimer(data.time_seconds, data.time_formatted);
+  // 收到伺服器更新時，重設本地倒數基準
+  localTimerSeconds = data.time_seconds;
 });
+
+// 本地每秒倒數，畫面順暢不依賴網路
+let localTimerSeconds = 0;
+setInterval(() => {
+  if (localTimerSeconds > 0) {
+    localTimerSeconds -= 1;
+    updateSharedTimer(localTimerSeconds, null);
+  }
+}, 1000);
 
 socket.on('disconnect', () => {
   console.log('⚠️ WebSocket 斷線，嘗試重連...');
