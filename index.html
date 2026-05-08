@@ -7,56 +7,202 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0a0a0f; --surface: #111118; --card: #16161f; --border: #2a2a3a;
-    --accent: #7c5cfc; --accent2: #00e5ff; --gold: #ffd84d; --red: #ff4d6d;
-    --green: #00e676; --text: #eeeef5; --muted: #666688;
-    --font-display: 'Syne', sans-serif; --font-mono: 'Space Mono', monospace;
+    --bg: #0a0a0f;
+    --surface: #111118;
+    --card: #16161f;
+    --border: #2a2a3a;
+    --accent: #7c5cfc;
+    --accent2: #00e5ff;
+    --gold: #ffd84d;
+    --red: #ff4d6d;
+    --green: #00e676;
+    --text: #eeeef5;
+    --muted: #666688;
+    --font-display: 'Syne', sans-serif;
+    --font-mono: 'Space Mono', monospace;
   }
+
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { background: var(--bg); color: var(--text); font-family: var(--font-display); min-height: 100vh; overflow-x: hidden; }
-  body::before {
-    content: ''; position: fixed; inset: 0;
-    background-image: linear-gradient(rgba(124,92,252,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(124,92,252,0.03) 1px, transparent 1px);
-    background-size: 40px 40px; pointer-events: none; z-index: 0;
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-display);
+    min-height: 100vh;
+    overflow-x: hidden;
   }
-  .glow-orb { position: fixed; border-radius: 50%; filter: blur(120px); pointer-events: none; z-index: 0; }
+
+  /* Background grid */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(124,92,252,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(124,92,252,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .glow-orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(120px);
+    pointer-events: none;
+    z-index: 0;
+  }
   .glow-orb.purple { width: 600px; height: 600px; background: rgba(124,92,252,0.08); top: -200px; right: -100px; }
-  .glow-orb.cyan { width: 400px; height: 400px; background: rgba(0,229,255,0.05); bottom: -100px; left: -100px; }
+  .glow-orb.cyan   { width: 400px; height: 400px; background: rgba(0,229,255,0.05); bottom: -100px; left: -100px; }
+
+  /* Layout */
   .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
-  header { border-bottom: 1px solid var(--border); padding: 20px 0; position: sticky; top: 0; background: rgba(10,10,15,0.85); backdrop-filter: blur(20px); z-index: 100; }
-  .header-inner { display: flex; align-items: center; justify-content: space-between; }
-  .logo { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; }
+
+  /* Header */
+  header {
+    border-bottom: 1px solid var(--border);
+    padding: 20px 0;
+    position: sticky;
+    top: 0;
+    background: rgba(10,10,15,0.85);
+    backdrop-filter: blur(20px);
+    z-index: 100;
+  }
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .logo {
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+  }
   .logo span { color: var(--accent); }
-  .robux-badge { display: flex; align-items: center; gap: 8px; background: var(--card); border: 1px solid var(--border); border-radius: 999px; padding: 8px 16px; font-family: var(--font-mono); font-size: 13px; }
+  .robux-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 8px 16px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+  }
   .robux-badge .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
   @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
-  #login-section { min-height: calc(100vh - 65px); display: flex; align-items: center; justify-content: center; padding: 60px 0; }
-  .login-box { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 48px; width: 100%; max-width: 440px; text-align: center; }
+
+  /* Login section */
+  #login-section {
+    min-height: calc(100vh - 65px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 0;
+  }
+  .login-box {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 48px;
+    width: 100%;
+    max-width: 440px;
+    text-align: center;
+  }
   .login-box .icon { font-size: 48px; margin-bottom: 20px; }
   .login-box h2 { font-size: 28px; font-weight: 800; margin-bottom: 8px; }
   .login-box p { color: var(--muted); font-size: 14px; margin-bottom: 32px; line-height: 1.6; }
   .input-group { position: relative; margin-bottom: 16px; }
-  .input-group input { width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; color: var(--text); font-family: var(--font-mono); font-size: 14px; outline: none; transition: border-color 0.2s; }
+  .input-group input {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
   .input-group input:focus { border-color: var(--accent); }
   .input-group input::placeholder { color: var(--muted); }
-  .btn { width: 100%; padding: 14px; border-radius: 12px; border: none; font-family: var(--font-display); font-size: 15px; font-weight: 700; cursor: pointer; transition: all 0.2s; letter-spacing: 0.3px; }
-  .btn-primary { background: var(--accent); color: #fff; }
+
+  /* Buttons */
+  .btn {
+    width: 100%;
+    padding: 14px;
+    border-radius: 12px;
+    border: none;
+    font-family: var(--font-display);
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.3px;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+  }
   .btn-primary:hover { background: #6a4ae0; transform: translateY(-1px); }
-  .btn-secondary { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
+  .btn-secondary {
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
   .btn-secondary:hover { border-color: var(--accent); }
   .btn-gold { background: var(--gold); color: #000; }
   .btn-gold:hover { background: #f0c832; transform: translateY(-1px); }
   .btn-danger { background: var(--red); color: #fff; }
-  .btn-warning { background: #ff9800; color: #000; }
-  .btn-warning:hover { background: #f08000; transform: translateY(-1px); }
-  .btn-sm { width: auto; padding: 10px 20px; font-size: 13px; border-radius: 10px; }
+  .btn-sm {
+    width: auto;
+    padding: 10px 20px;
+    font-size: 13px;
+    border-radius: 10px;
+  }
+
+  /* Dashboard */
   #dashboard-section { display: none; padding: 40px 0 80px; }
-  .section-title { font-size: 13px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 16px; }
-  .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 32px; }
+
+  .section-title {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+
+  /* Stats grid */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 32px;
+  }
   @media (max-width: 600px) { .stats-grid { grid-template-columns: 1fr; } }
-  .stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 24px; position: relative; overflow: hidden; transition: border-color 0.2s; }
+
+  .stat-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
   .stat-card:hover { border-color: var(--accent); }
-  .stat-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--accent), var(--accent2)); opacity: 0; transition: opacity 0.2s; }
+  .stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
   .stat-card:hover::before { opacity: 1; }
   .stat-label { font-size: 12px; color: var(--muted); font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px; }
   .stat-value { font-size: 32px; font-weight: 800; line-height: 1; margin-bottom: 4px; }
@@ -64,64 +210,159 @@
   .stat-card.vip .stat-value { color: var(--gold); }
   .stat-card.time .stat-value { color: var(--accent2); font-size: 24px; }
   .stat-card.token .stat-value { color: var(--accent); }
-  .actions-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 32px; }
+
+  /* Actions grid */
+  .actions-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 32px;
+  }
   @media (max-width: 600px) { .actions-grid { grid-template-columns: 1fr; } }
-  .action-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 28px; }
+
+  .action-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+  }
   .action-card h3 { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
   .action-card p { font-size: 13px; color: var(--muted); margin-bottom: 20px; line-height: 1.5; }
-  .action-card .cost { display: inline-flex; align-items: center; gap: 6px; background: rgba(124,92,252,0.1); border: 1px solid rgba(124,92,252,0.3); border-radius: 8px; padding: 4px 12px; font-size: 12px; font-family: var(--font-mono); color: var(--accent); margin-bottom: 16px; }
-  .lottery-result { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-top: 16px; display: none; text-align: center; }
+  .action-card .cost {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(124,92,252,0.1);
+    border: 1px solid rgba(124,92,252,0.3);
+    border-radius: 8px;
+    padding: 4px 12px;
+    font-size: 12px;
+    font-family: var(--font-mono);
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+
+  /* Lottery result */
+  .lottery-result {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    margin-top: 16px;
+    display: none;
+    text-align: center;
+  }
   .lottery-result.show { display: block; animation: fadeIn 0.3s ease; }
   .lottery-result .prize { font-size: 28px; font-weight: 800; margin: 8px 0; }
   .lottery-result .prize.good { color: var(--green); }
-  .lottery-result .prize.bad { color: var(--red); }
+  .lottery-result .prize.bad  { color: var(--red); }
   .lottery-result .prize.epic { color: var(--gold); }
+
   @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-  .robux-section { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 28px; margin-bottom: 32px; }
-  .robux-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 20px; }
+
+  /* Robux section */
+  .robux-section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+    margin-bottom: 32px;
+  }
+  .robux-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 20px;
+  }
   @media (max-width: 600px) { .robux-row { grid-template-columns: 1fr; } }
   .robux-item { text-align: center; }
   .robux-item .label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
   .robux-item .value { font-size: 28px; font-weight: 800; font-family: var(--font-mono); }
   .robux-item.pending .value { color: var(--gold); }
   .robux-item.cleared .value { color: var(--green); }
-  .robux-item.total .value { color: var(--accent2); }
-  .toast { position: fixed; bottom: 24px; right: 24px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 14px 20px; font-size: 14px; z-index: 999; transform: translateY(20px); opacity: 0; transition: all 0.3s; max-width: 320px; }
+  .robux-item.total .value   { color: var(--accent2); }
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 20px;
+    font-size: 14px;
+    z-index: 999;
+    transform: translateY(20px);
+    opacity: 0;
+    transition: all 0.3s;
+    max-width: 320px;
+  }
   .toast.show { transform: translateY(0); opacity: 1; }
   .toast.success { border-color: var(--green); color: var(--green); }
-  .toast.error { border-color: var(--red); color: var(--red); }
-  .user-bar { display: flex; align-items: center; justify-content: space-between; background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 16px 24px; margin-bottom: 32px; }
+  .toast.error   { border-color: var(--red);   color: var(--red); }
+
+  /* User info bar */
+  .user-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 16px 24px;
+    margin-bottom: 32px;
+  }
   .user-info { display: flex; align-items: center; gap: 12px; }
-  .user-avatar { width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(135deg, var(--accent), var(--accent2)); display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 800; }
+  .user-avatar {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; font-weight: 800;
+  }
   .user-name { font-size: 16px; font-weight: 700; }
   .user-id { font-size: 12px; color: var(--muted); font-family: var(--font-mono); }
-  .vip-tag { background: linear-gradient(135deg, #ffd84d, #ff9800); color: #000; font-size: 11px; font-weight: 800; letter-spacing: 1px; padding: 3px 10px; border-radius: 999px; text-transform: uppercase; }
+  .vip-tag {
+    background: linear-gradient(135deg, #ffd84d, #ff9800);
+    color: #000;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    padding: 3px 10px;
+    border-radius: 999px;
+    text-transform: uppercase;
+  }
+
+  /* Buy time input */
   .buy-time-row { display: flex; gap: 10px; }
-  .buy-time-row input { flex: 1; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; color: var(--text); font-family: var(--font-mono); font-size: 14px; outline: none; }
+  .buy-time-row input {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 14px;
+    outline: none;
+  }
   .buy-time-row input:focus { border-color: var(--accent); }
-  .time-preview { font-size: 12px; color: var(--muted); font-family: var(--font-mono); margin-top: 8px; }
+  .time-preview {
+    font-size: 12px;
+    color: var(--muted);
+    font-family: var(--font-mono);
+    margin-top: 8px;
+  }
   .time-preview span { color: var(--accent2); }
+
   hr { border: none; border-top: 1px solid var(--border); margin: 8px 0 20px; }
-  .paused-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,152,0,0.15); border: 1px solid rgba(255,152,0,0.4); border-radius: 8px; padding: 4px 10px; font-size: 11px; font-family: var(--font-mono); color: #ff9800; margin-top: 8px; }
-  .timer-controls { display: flex; gap: 8px; margin-top: 12px; }
-  /* 排行榜 */
-  .leaderboard-table { width: 100%; border-collapse: collapse; margin-top: 12px; font-family: var(--font-mono); font-size: 13px; }
-  .leaderboard-table th { text-align: left; color: var(--muted); font-size: 11px; letter-spacing: 1px; padding: 6px 8px; border-bottom: 1px solid var(--border); }
-  .leaderboard-table td { padding: 8px 8px; border-bottom: 1px solid rgba(42,42,58,0.5); }
-  .leaderboard-table tr:hover td { background: rgba(124,92,252,0.05); }
-  .rank-1 { color: var(--gold); font-weight: 800; }
-  .rank-2 { color: #c0c0c0; font-weight: 700; }
-  .rank-3 { color: #cd7f32; font-weight: 700; }
-  /* 查詢玩家結果 */
-  .query-result { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 12px; margin-top: 10px; font-family: var(--font-mono); font-size: 12px; display: none; }
-  .query-result.show { display: block; }
-  .query-result .q-row { display: flex; justify-content: space-between; padding: 3px 0; border-bottom: 1px solid rgba(42,42,58,0.5); }
-  .query-result .q-row:last-child { border-bottom: none; }
-  .query-result .q-key { color: var(--muted); }
-  .query-result .q-val { color: var(--text); font-weight: 700; }
+
+  .loading { opacity: 0.5; pointer-events: none; }
 </style>
 </head>
 <body>
+
 <div class="glow-orb purple"></div>
 <div class="glow-orb cyan"></div>
 
@@ -135,6 +376,7 @@
   </div>
 </header>
 
+<!-- Login -->
 <section id="login-section">
   <div class="container">
     <div class="login-box">
@@ -142,15 +384,18 @@
       <h2>輸入你的 Roblox ID</h2>
       <p>輸入你在 Roblox 的用戶 ID 來查看你的時間、token 和 VIP 狀態。</p>
       <div class="input-group">
-        <input type="text" id="roblox-id-input" placeholder="Roblox 用戶 ID（例如：123456789）" />
+        <input type="text" id="roblox-id-input" placeholder="Roblox 用戶名或數字 ID" />
       </div>
       <button class="btn btn-primary" onclick="login()">進入面板</button>
     </div>
   </div>
 </section>
 
+<!-- Dashboard -->
 <section id="dashboard-section">
   <div class="container">
+
+    <!-- User bar -->
     <div class="user-bar">
       <div class="user-info">
         <div class="user-avatar" id="user-avatar">R</div>
@@ -163,6 +408,7 @@
       <button class="btn btn-secondary btn-sm" onclick="logout()">切換帳號</button>
     </div>
 
+    <!-- Stats -->
     <div class="section-title">目前狀態</div>
     <div class="stats-grid">
       <div class="stat-card token">
@@ -174,7 +420,6 @@
         <div class="stat-label">🌐 共用計時器</div>
         <div class="stat-value" id="shared-timer-display">--:--:--</div>
         <div class="stat-sub">全員共享時間池</div>
-        <div id="paused-badge" class="paused-badge" style="display:none">⏸ 計時器已暫停</div>
       </div>
       <div class="stat-card vip">
         <div class="stat-label">身分</div>
@@ -183,8 +428,11 @@
       </div>
     </div>
 
+    <!-- Actions -->
     <div class="section-title">操作</div>
     <div class="actions-grid">
+
+      <!-- Buy time -->
       <div class="action-card">
         <h3>⏱ 購買時間</h3>
         <p>花 token 將時間加入<strong>共用計時器</strong>。VIP 玩家享有 ×1.2 加成。</p>
@@ -195,144 +443,103 @@
         </div>
         <div class="time-preview" id="time-preview">輸入數量後顯示預計時間</div>
       </div>
+
+      <!-- Lottery -->
       <div class="action-card">
         <h3>🎰 抽獎</h3>
-        <p>花 500 token 抽獎！獎項：+300分(10%) +100分(60.95%) +50分(28%) ×2(0.5%) ÷2(0.5%) ×5(0.05%)</p>
+        <p>花 500 token 抽獎，有機會大賺或大虧！</p>
         <div class="cost">500 token / 次</div>
         <button class="btn btn-primary" onclick="doLottery()">抽一次！</button>
         <div class="lottery-result" id="lottery-result">
           <div style="font-size:13px;color:var(--muted)">抽獎結果</div>
           <div class="prize" id="lottery-prize">—</div>
-          <div style="font-size:12px;color:var(--muted)" id="lottery-time">—</div>
+          <div style="font-size:12px;color:var(--muted)" id="lottery-time">剩餘時間：—</div>
         </div>
       </div>
+
+      <!-- Buy VIP -->
       <div class="action-card">
         <h3>⭐ 購買 VIP</h3>
         <p>永久 VIP 身分，購買時間時享有 ×1.2 倍加成。</p>
         <div class="cost">2500 token（永久）</div>
         <button class="btn btn-gold" id="vip-btn" onclick="buyVip()">成為 VIP</button>
       </div>
+
+      <!-- Refresh -->
       <div class="action-card">
         <h3>🔄 重新整理</h3>
         <p>重新從伺服器載入你的最新資料。</p>
         <hr>
         <button class="btn btn-secondary" onclick="refreshPlayer()">重新載入資料</button>
       </div>
+
     </div>
 
+    <!-- Robux -->
     <div class="section-title">Group Robux 收益</div>
     <div class="robux-section">
-      <div style="font-size:14px;color:var(--muted)">最後更新：<span id="robux-time">—</span></div>
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <div style="font-size:14px;color:var(--muted)">最後更新：<span id="robux-time">—</span></div>
+      </div>
       <div class="robux-row">
-        <div class="robux-item pending"><div class="label">待處理</div><div class="value" id="robux-pending">—</div><div style="font-size:11px;color:var(--muted);margin-top:4px">R$</div></div>
-        <div class="robux-item cleared"><div class="label">已處理</div><div class="value" id="robux-cleared">—</div><div style="font-size:11px;color:var(--muted);margin-top:4px">R$</div></div>
-        <div class="robux-item total"><div class="label">合計</div><div class="value" id="robux-total">—</div><div style="font-size:11px;color:var(--muted);margin-top:4px">R$</div></div>
+        <div class="robux-item pending">
+          <div class="label">待處理</div>
+          <div class="value" id="robux-pending">—</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:4px">R$</div>
+        </div>
+        <div class="robux-item cleared">
+          <div class="label">已處理</div>
+          <div class="value" id="robux-cleared">—</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:4px">R$</div>
+        </div>
+        <div class="robux-item total">
+          <div class="label">合計</div>
+          <div class="value" id="robux-total">—</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:4px">R$</div>
+        </div>
       </div>
     </div>
+
   </div>
 </section>
 
-<!-- Admin Panel -->
-<div id="admin-panel" style="display:none">
-  <div class="container">
-    <div class="section-title">🔧 管理員面板</div>
-    <div class="actions-grid">
 
-      <!-- 加時間 -->
-      <div class="action-card" style="border-color:rgba(255,77,109,0.4)">
-        <h3>⏱ 加時間</h3>
-        <p>直接加入共用計時器（單位：分鐘）</p>
-        <div class="buy-time-row" style="margin-bottom:8px">
-          <input type="number" id="admin-time-input" placeholder="分鐘（例如 60 = 1小時）" min="1" />
-          <button class="btn btn-danger btn-sm" onclick="adminAddTime()">加入</button>
+    <!-- Admin Panel -->
+    <div id="admin-panel" style="display:none">
+      <div class="section-title">🔧 管理員面板</div>
+      <div class="actions-grid">
+
+        <div class="action-card" style="border-color: rgba(255,77,109,0.4);">
+          <h3>⏱ 直接加時間</h3>
+          <p>直接加入共用計時器（單位：秒）</p>
+          <div class="buy-time-row" style="margin-bottom:8px">
+            <input type="number" id="admin-time-input" placeholder="秒數（例如 3600 = 1小時）" min="1" />
+            <button class="btn btn-danger btn-sm" onclick="adminAddTime()">加入</button>
+          </div>
+          <div style="font-size:12px;color:var(--muted);font-family:var(--font-mono)" id="admin-time-result">—</div>
         </div>
-        <div style="font-size:12px;color:var(--muted);font-family:var(--font-mono)" id="admin-time-result">—</div>
-      </div>
 
-      <!-- 設定時間 -->
-      <div class="action-card" style="border-color:rgba(255,77,109,0.4)">
-        <h3>🎯 設定時間</h3>
-        <p>直接設定計時器為指定時間（分鐘）</p>
-        <div class="buy-time-row" style="margin-bottom:8px">
-          <input type="number" id="admin-set-time-input" placeholder="分鐘（例如 120 = 2小時）" min="0" />
-          <button class="btn btn-danger btn-sm" onclick="adminSetTime()">設定</button>
+        <div class="action-card" style="border-color: rgba(255,77,109,0.4);">
+          <h3>🪙 生成 Token</h3>
+          <p>直接給指定玩家 token</p>
+          <div class="buy-time-row" style="margin-bottom:8px">
+            <input type="text" id="admin-token-id" placeholder="Roblox ID" style="max-width:140px" />
+            <input type="number" id="admin-token-amount" placeholder="數量" min="1" />
+            <button class="btn btn-danger btn-sm" onclick="adminAddTokens()">給予</button>
+          </div>
+          <div style="font-size:12px;color:var(--muted);font-family:var(--font-mono)" id="admin-token-result">—</div>
         </div>
-        <button class="btn btn-secondary btn-sm" style="margin-top:8px" onclick="adminResetTimer()">🗑 歸零</button>
-        <div style="font-size:12px;color:var(--muted);font-family:var(--font-mono);margin-top:8px" id="admin-set-result">—</div>
-      </div>
 
-      <!-- 暫停/繼續 -->
-      <div class="action-card" style="border-color:rgba(255,77,109,0.4)">
-        <h3>⏸ 暫停 / 繼續</h3>
-        <p>暫停計時器（出門時用），繼續後恢復倒數。</p>
-        <div class="timer-controls">
-          <button class="btn btn-warning btn-sm" onclick="pauseTimer()">⏸ 暫停</button>
-          <button class="btn btn-primary btn-sm" onclick="resumeTimer()">▶ 繼續</button>
-        </div>
-        <div style="font-size:12px;color:var(--muted);font-family:var(--font-mono);margin-top:10px" id="pause-result">—</div>
       </div>
-
-      <!-- 查詢玩家 -->
-      <div class="action-card" style="border-color:rgba(255,77,109,0.4)">
-        <h3>🔍 查詢玩家</h3>
-        <p>查詢指定玩家的資料</p>
-        <div class="buy-time-row" style="margin-bottom:8px">
-          <input type="text" id="admin-query-id" placeholder="Roblox ID" />
-          <button class="btn btn-danger btn-sm" onclick="adminQueryPlayer()">查詢</button>
-        </div>
-        <div class="query-result" id="query-result"></div>
-      </div>
-
-      <!-- 給予 Token -->
-      <div class="action-card" style="border-color:rgba(255,77,109,0.4)">
-        <h3>🪙 給予 Token</h3>
-        <p>直接給指定玩家 token</p>
-        <div class="buy-time-row" style="margin-bottom:8px">
-          <input type="text" id="admin-token-id" placeholder="Roblox ID" style="max-width:140px" />
-          <input type="number" id="admin-token-amount" placeholder="數量" min="1" />
-          <button class="btn btn-danger btn-sm" onclick="adminAddTokens()">給予</button>
-        </div>
-        <div style="font-size:12px;color:var(--muted);font-family:var(--font-mono)" id="admin-token-result">—</div>
-      </div>
-
-      <!-- 扣除/重置 Token -->
-      <div class="action-card" style="border-color:rgba(255,77,109,0.4)">
-        <h3>✂️ 扣除 / 重置 Token</h3>
-        <p>扣除玩家 token 或直接重置為 0</p>
-        <div class="buy-time-row" style="margin-bottom:8px">
-          <input type="text" id="admin-remove-id" placeholder="Roblox ID" style="max-width:140px" />
-          <input type="number" id="admin-remove-amount" placeholder="扣除數量" min="1" />
-          <button class="btn btn-danger btn-sm" onclick="adminRemoveTokens()">扣除</button>
-        </div>
-        <button class="btn btn-secondary btn-sm" style="margin-top:4px" onclick="adminResetTokens()">🗑 重置為 0</button>
-        <div style="font-size:12px;color:var(--muted);font-family:var(--font-mono);margin-top:8px" id="admin-remove-result">—</div>
-      </div>
-
-      <!-- 排行榜 -->
-      <div class="action-card" style="border-color:rgba(255,77,109,0.4);grid-column:span 2">
-        <h3>🏆 Token 排行榜</h3>
-        <p>token 最多的前 10 名玩家</p>
-        <button class="btn btn-secondary btn-sm" onclick="loadLeaderboard()">載入排行榜</button>
-        <table class="leaderboard-table" id="leaderboard-table" style="display:none">
-          <thead><tr><th>#</th><th>Roblox ID</th><th>Token</th><th>VIP</th></tr></thead>
-          <tbody id="leaderboard-body"></tbody>
-        </table>
-      </div>
-
     </div>
-  </div>
-</div>
 
+<!-- Toast -->
 <div class="toast" id="toast"></div>
 
 <script>
 const API = 'https://mooncatfemboy.up.railway.app';
 const SECRET = 'change_this_secret';
-const ADMIN_IDS = new Set(['10692842841', '7323401477']);
 let currentPlayer = null;
-let sharedTimerSeconds = 0;
-let timerPaused = false;
-let timerInterval = null;
 
 function showToast(msg, type = 'success') {
   const t = document.getElementById('toast');
@@ -355,17 +562,6 @@ async function apiPost(path, data) {
   return [await r.json(), r.status];
 }
 
-function fmtTime(secs) {
-  const h = Math.floor(secs / 3600);
-  const m = Math.floor((secs % 3600) / 60);
-  const s = secs % 60;
-  return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
-}
-
-function getAdminId() {
-  return currentPlayer?.roblox_id;
-}
-
 function updateUI(player) {
   currentPlayer = player;
   document.getElementById('stat-tokens').textContent = player.tokens.toLocaleString();
@@ -376,75 +572,43 @@ function updateUI(player) {
   document.getElementById('vip-btn').textContent = player.is_vip ? '已是 VIP ✓' : '成為 VIP';
   document.getElementById('user-id-display').textContent = `ID: ${player.roblox_id}`;
   document.getElementById('user-avatar').textContent = player.roblox_id[0].toUpperCase();
-  document.getElementById('admin-panel').style.display = ADMIN_IDS.has(player.roblox_id) ? 'block' : 'none';
-}
-
-function updateSharedTimerDisplay() {
-  const el = document.getElementById('shared-timer-display');
-  el.textContent = fmtTime(Math.max(0, sharedTimerSeconds));
-  if (timerPaused) {
-    el.style.color = '#ff9800';
-    document.getElementById('paused-badge').style.display = 'inline-flex';
+  // 管理員面板
+  if (player.roblox_id === ADMIN_ID) {
+    document.getElementById('admin-panel').style.display = 'block';
   } else {
-    document.getElementById('paused-badge').style.display = 'none';
-    if (sharedTimerSeconds <= 0) el.style.color = 'var(--red)';
-    else if (sharedTimerSeconds <= 300) el.style.color = '#ff9800';
-    else if (sharedTimerSeconds <= 600) el.style.color = 'var(--gold)';
-    else el.style.color = 'var(--accent2)';
+    document.getElementById('admin-panel').style.display = 'none';
   }
 }
 
-function startLocalTick() {
-  if (timerInterval) clearInterval(timerInterval);
-  timerInterval = setInterval(() => {
-    if (!timerPaused && sharedTimerSeconds > 0) {
-      sharedTimerSeconds--;
-      updateSharedTimerDisplay();
-    }
-  }, 1000);
-}
-
-async function syncSharedTimer() {
-  try {
-    const data = await apiGet('/api/shared_timer');
-    if (!data.error) {
-      sharedTimerSeconds = data.time_seconds;
-      timerPaused = !!data.paused;
-      updateSharedTimerDisplay();
-    }
-  } catch(e) {}
-}
-
-async function loadSharedTimer() {
-  await syncSharedTimer();
-  startLocalTick();
-  setInterval(syncSharedTimer, 15000);
-}
 
 async function login() {
-  const id = document.getElementById('roblox-id-input').value.trim();
-  if (!id) return showToast('請輸入 Roblox ID', 'error');
+  let id = document.getElementById('roblox-id-input').value.trim();
+  if (!id) return showToast('請輸入 Roblox 用戶名或 ID', 'error');
   try {
+    // 如果不是純數字，先查詢 Roblox 用戶名轉 ID
+    if (!/^\d+$/.test(id)) {
+      const lookup = await apiGet(`/api/lookup_user?username=${encodeURIComponent(id)}`);
+      if (lookup.error) return showToast(lookup.error || '找不到此用戶名', 'error');
+      id = lookup.roblox_id;
+    }
+    // 嘗試取得玩家，找不到就自動建立
     let data = await apiGet(`/api/player/${id}`);
     if (data.error) {
       const [created] = await apiPost('/api/player', { roblox_id: id });
       data = created;
     }
-    updateUI(data);
+updateUI(data);
     document.getElementById('login-section').style.display = 'none';
     document.getElementById('dashboard-section').style.display = 'block';
     loadRobux();
     loadSharedTimer();
   } catch(e) {
-    showToast('無法連線到伺服器', 'error');
+    showToast('無法連線到伺服器，請確認 app.py 正在執行', 'error');
   }
 }
-
 function logout() {
   currentPlayer = null;
-  if (timerInterval) clearInterval(timerInterval);
   document.getElementById('dashboard-section').style.display = 'none';
-  document.getElementById('admin-panel').style.display = 'none';
   document.getElementById('login-section').style.display = 'flex';
   document.getElementById('roblox-id-input').value = '';
 }
@@ -454,7 +618,9 @@ function updateTimePreview() {
   const isVip = currentPlayer?.is_vip;
   const mult = isVip ? 1.2 : 1.0;
   const secs = Math.floor(tokens * 12 * mult);
-  const h = Math.floor(secs / 3600), m = Math.floor((secs % 3600) / 60), s = secs % 60;
+  const h = Math.floor(secs / 3600);
+  const m = Math.floor((secs % 3600) / 60);
+  const s = secs % 60;
   const vipNote = isVip ? ' <span style="color:var(--gold)">(VIP ×1.2)</span>' : '';
   document.getElementById('time-preview').innerHTML =
     tokens >= 5 ? `預計獲得：<span>${h}h ${m}m ${s}s</span>${vipNote}` : '最低 5 token 起跳';
@@ -465,31 +631,34 @@ async function buyTime() {
   if (!tokens || tokens < 5) return showToast('最低 5 token', 'error');
   const [data, status] = await apiPost('/api/shared_timer/add', { roblox_id: currentPlayer.roblox_id, tokens });
   if (status !== 200) return showToast(data.error || '發生錯誤', 'error');
+  // 扣 token，個人時間不變，更新共用計時器顯示
   updateUI({ ...currentPlayer, tokens: currentPlayer.tokens - tokens });
-  sharedTimerSeconds = data.time_seconds;
-  updateSharedTimerDisplay();
-  const addedMin = Math.floor(data.added_seconds / 60), addedSec = data.added_seconds % 60;
+  const addedMin = Math.floor(data.added_seconds / 60);
+  const addedSec = data.added_seconds % 60;
   showToast(`✅ 已加入共用計時器 +${addedMin}m ${addedSec}s！`);
   document.getElementById('buy-time-input').value = '';
   updateTimePreview();
+  // 更新共用計時器顯示
+  updateSharedTimer(data.time_seconds, data.time_formatted);
 }
 
 async function doLottery() {
   if (currentPlayer.tokens < 500) return showToast('Token 不足（需要 500）', 'error');
   const [data, status] = await apiPost('/api/lottery', { roblox_id: currentPlayer.roblox_id });
   if (status !== 200) return showToast(data.error || '發生錯誤', 'error');
+
   const prize = data.prize;
   const el = document.getElementById('lottery-prize');
   el.className = 'prize';
-  if (prize.includes('×5')) el.classList.add('epic');
-  else if (prize.includes('÷')) el.classList.add('bad');
-  else el.classList.add('good');
+  if (prize.includes('×5')) { el.classList.add('epic'); }
+  else if (prize.includes('÷')) { el.classList.add('bad'); }
+  else { el.classList.add('good'); }
   el.textContent = prize;
   document.getElementById('lottery-time').textContent = `共用計時器：${data.time_formatted}`;
   document.getElementById('lottery-result').classList.add('show');
+
   updateUI({ ...currentPlayer, tokens: currentPlayer.tokens - 500 });
-  sharedTimerSeconds = data.time_seconds;
-  updateSharedTimerDisplay();
+  updateSharedTimer(data.time_seconds, data.time_formatted);
 }
 
 async function buyVip() {
@@ -500,59 +669,48 @@ async function buyVip() {
   showToast('🎉 成為 VIP！');
 }
 
+function updateSharedTimer(seconds, formatted) {
+  document.getElementById('shared-timer-display').textContent = formatted || '00:00:00';
+  const el = document.getElementById('shared-timer-display');
+  if (seconds <= 0) el.style.color = 'var(--red)';
+  else if (seconds <= 300) el.style.color = '#ff9800';
+  else if (seconds <= 600) el.style.color = 'var(--gold)';
+  else el.style.color = 'var(--accent2)';
+}
+
 async function refreshPlayer() {
   if (!currentPlayer) return;
   try {
     const data = await apiGet(`/api/player/${currentPlayer.roblox_id}`);
-    if (!data.error) { updateUI(data); await syncSharedTimer(); showToast('✅ 資料已更新！'); }
-  } catch(e) { showToast('連線失敗', 'error'); }
+    if (!data.error) {
+      updateUI(data);
+      loadSharedTimer();
+      showToast('✅ 資料已更新！');
+    }
+  } catch(e) {
+    showToast('連線失敗', 'error');
+  }
 }
 
-async function pauseTimer() {
-  const [data, status] = await apiPost('/api/shared_timer/pause', { admin_id: getAdminId() });
-  if (status !== 200) return showToast(data.error || '發生錯誤', 'error');
-  timerPaused = true; updateSharedTimerDisplay();
-  document.getElementById('pause-result').textContent = '⏸ 計時器已暫停';
-  showToast('⏸ 計時器已暫停');
+async function loadSharedTimer() {
+  try {
+    const data = await apiGet('/api/shared_timer');
+    if (!data.error) updateSharedTimer(data.time_seconds, data.time_formatted);
+  } catch(e) {}
 }
 
-async function resumeTimer() {
-  const [data, status] = await apiPost('/api/shared_timer/resume', { admin_id: getAdminId() });
-  if (status !== 200) return showToast(data.error || '發生錯誤', 'error');
-  timerPaused = false; updateSharedTimerDisplay();
-  document.getElementById('pause-result').textContent = '▶ 計時器已繼續';
-  showToast('▶ 計時器已繼續！');
-}
+
+const ADMIN_ID = '10692842841';
 
 async function adminAddTime() {
-  const minutes = parseInt(document.getElementById('admin-time-input').value);
-  if (!minutes || minutes <= 0) return showToast('請輸入分鐘數', 'error');
-  const [data, status] = await apiPost('/api/admin/add_time', { admin_id: getAdminId(), minutes });
+  const seconds = parseInt(document.getElementById('admin-time-input').value);
+  if (!seconds || seconds <= 0) return showToast('請輸入秒數', 'error');
+  const [data, status] = await apiPost('/api/admin/add_time', { admin_id: ADMIN_ID, seconds });
   if (status !== 200) return showToast(data.error || '發生錯誤', 'error');
-  sharedTimerSeconds = data.time_seconds; updateSharedTimerDisplay();
   document.getElementById('admin-time-result').textContent = `✅ 共用計時器：${data.time_formatted}`;
-  showToast(`✅ 加入 ${minutes} 分鐘成功！`);
+  updateSharedTimer(data.time_seconds, data.time_formatted);
+  showToast(`✅ 加入 ${seconds} 秒成功！`);
   document.getElementById('admin-time-input').value = '';
-}
-
-async function adminSetTime() {
-  const minutes = parseInt(document.getElementById('admin-set-time-input').value);
-  if (isNaN(minutes) || minutes < 0) return showToast('請輸入分鐘數', 'error');
-  const [data, status] = await apiPost('/api/admin/set_time', { admin_id: getAdminId(), minutes });
-  if (status !== 200) return showToast(data.error || '發生錯誤', 'error');
-  sharedTimerSeconds = data.time_seconds; updateSharedTimerDisplay();
-  document.getElementById('admin-set-result').textContent = `✅ 已設定為 ${data.time_formatted}`;
-  showToast(`✅ 計時器設定為 ${minutes} 分鐘！`);
-  document.getElementById('admin-set-time-input').value = '';
-}
-
-async function adminResetTimer() {
-  if (!confirm('確定要將計時器歸零？')) return;
-  const [data, status] = await apiPost('/api/admin/reset_timer', { admin_id: getAdminId() });
-  if (status !== 200) return showToast(data.error || '發生錯誤', 'error');
-  sharedTimerSeconds = 0; updateSharedTimerDisplay();
-  document.getElementById('admin-set-result').textContent = '✅ 計時器已歸零';
-  showToast('✅ 計時器已歸零！');
 }
 
 async function adminAddTokens() {
@@ -560,60 +718,12 @@ async function adminAddTokens() {
   const tokens = parseInt(document.getElementById('admin-token-amount').value);
   if (!roblox_id) return showToast('請輸入 Roblox ID', 'error');
   if (!tokens || tokens <= 0) return showToast('請輸入數量', 'error');
-  const [data, status] = await apiPost('/api/admin/add_tokens', { admin_id: getAdminId(), roblox_id, tokens });
+  const [data, status] = await apiPost('/api/admin/add_tokens', { admin_id: ADMIN_ID, roblox_id, tokens });
   if (status !== 200) return showToast(data.error || '發生錯誤', 'error');
   document.getElementById('admin-token-result').textContent = `✅ ${roblox_id} 現有 ${data.tokens.toLocaleString()} token`;
   showToast(`✅ 給予 ${tokens} token 成功！`);
   document.getElementById('admin-token-id').value = '';
   document.getElementById('admin-token-amount').value = '';
-}
-
-async function adminRemoveTokens() {
-  const roblox_id = document.getElementById('admin-remove-id').value.trim();
-  const tokens = parseInt(document.getElementById('admin-remove-amount').value);
-  if (!roblox_id) return showToast('請輸入 Roblox ID', 'error');
-  if (!tokens || tokens <= 0) return showToast('請輸入數量', 'error');
-  const [data, status] = await apiPost('/api/admin/remove_tokens', { admin_id: getAdminId(), roblox_id, tokens });
-  if (status !== 200) return showToast(data.error || '發生錯誤', 'error');
-  document.getElementById('admin-remove-result').textContent = `✅ ${roblox_id} 現有 ${data.tokens.toLocaleString()} token`;
-  showToast(`✅ 扣除 ${tokens} token 成功！`);
-}
-
-async function adminResetTokens() {
-  const roblox_id = document.getElementById('admin-remove-id').value.trim();
-  if (!roblox_id) return showToast('請先輸入 Roblox ID', 'error');
-  if (!confirm(`確定要將 ${roblox_id} 的 token 重置為 0？`)) return;
-  const [data, status] = await apiPost('/api/admin/reset_tokens', { admin_id: getAdminId(), roblox_id });
-  if (status !== 200) return showToast(data.error || '發生錯誤', 'error');
-  document.getElementById('admin-remove-result').textContent = `✅ ${roblox_id} token 已重置為 0`;
-  showToast('✅ Token 重置成功！');
-}
-
-async function adminQueryPlayer() {
-  const roblox_id = document.getElementById('admin-query-id').value.trim();
-  if (!roblox_id) return showToast('請輸入 Roblox ID', 'error');
-  const data = await apiGet(`/api/admin/query_player?roblox_id=${roblox_id}`);
-  const el = document.getElementById('query-result');
-  if (data.error) { el.innerHTML = `<div style="color:var(--red)">${data.error}</div>`; el.classList.add('show'); return; }
-  el.innerHTML = `
-    <div class="q-row"><span class="q-key">Roblox ID</span><span class="q-val">${data.roblox_id}</span></div>
-    <div class="q-row"><span class="q-key">Token</span><span class="q-val">${data.tokens.toLocaleString()}</span></div>
-    <div class="q-row"><span class="q-key">VIP</span><span class="q-val">${data.is_vip ? '⭐ 是' : '否'}</span></div>
-    <div class="q-row"><span class="q-key">加入時間</span><span class="q-val">${data.created_at}</span></div>
-  `;
-  el.classList.add('show');
-}
-
-async function loadLeaderboard() {
-  const data = await apiGet('/api/admin/leaderboard');
-  if (data.error) return showToast(data.error, 'error');
-  const tbody = document.getElementById('leaderboard-body');
-  tbody.innerHTML = data.map((p, i) => {
-    const rankClass = i === 0 ? 'rank-1' : i === 1 ? 'rank-2' : i === 2 ? 'rank-3' : '';
-    const medal = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `${i+1}`;
-    return `<tr><td class="${rankClass}">${medal}</td><td>${p.roblox_id}</td><td class="${rankClass}">${p.tokens.toLocaleString()}</td><td>${p.is_vip ? '⭐' : '—'}</td></tr>`;
-  }).join('');
-  document.getElementById('leaderboard-table').style.display = 'table';
 }
 
 async function loadRobux() {
@@ -628,6 +738,7 @@ async function loadRobux() {
   } catch(e) {}
 }
 
+// Enter key to login
 document.getElementById('roblox-id-input').addEventListener('keydown', e => {
   if (e.key === 'Enter') login();
 });
