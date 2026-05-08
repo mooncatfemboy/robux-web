@@ -384,7 +384,7 @@
       <h2>輸入你的 Roblox ID</h2>
       <p>輸入你在 Roblox 的用戶 ID 來查看你的時間、token 和 VIP 狀態。</p>
       <div class="input-group">
-        <input type="text" id="roblox-id-input" placeholder="Roblox 用戶名或數字 ID" />
+        <input type="text" id="roblox-id-input" placeholder="Roblox 用戶 ID（例如：123456789）" />
       </div>
       <button class="btn btn-primary" onclick="login()">進入面板</button>
     </div>
@@ -582,15 +582,9 @@ function updateUI(player) {
 
 
 async function login() {
-  let id = document.getElementById('roblox-id-input').value.trim();
-  if (!id) return showToast('請輸入 Roblox 用戶名或 ID', 'error');
+  const id = document.getElementById('roblox-id-input').value.trim();
+  if (!id) return showToast('請輸入 Roblox ID', 'error');
   try {
-    // 如果不是純數字，先查詢 Roblox 用戶名轉 ID
-    if (!/^\d+$/.test(id)) {
-      const lookup = await apiGet(`/api/lookup_user?username=${encodeURIComponent(id)}`);
-      if (lookup.error) return showToast(lookup.error || '找不到此用戶名', 'error');
-      id = lookup.roblox_id;
-    }
     // 嘗試取得玩家，找不到就自動建立
     let data = await apiGet(`/api/player/${id}`);
     if (data.error) {
@@ -654,11 +648,10 @@ async function doLottery() {
   else if (prize.includes('÷')) { el.classList.add('bad'); }
   else { el.classList.add('good'); }
   el.textContent = prize;
-  document.getElementById('lottery-time').textContent = `共用計時器：${data.time_formatted}`;
+  document.getElementById('lottery-time').textContent = `剩餘時間：${data.time_formatted}`;
   document.getElementById('lottery-result').classList.add('show');
 
-  updateUI({ ...currentPlayer, tokens: currentPlayer.tokens - 500 });
-  updateSharedTimer(data.time_seconds, data.time_formatted);
+  updateUI({ ...currentPlayer, tokens: currentPlayer.tokens - 500, time_seconds: data.time_seconds, time_formatted: data.time_formatted });
 }
 
 async function buyVip() {
@@ -676,20 +669,6 @@ function updateSharedTimer(seconds, formatted) {
   else if (seconds <= 300) el.style.color = '#ff9800';
   else if (seconds <= 600) el.style.color = 'var(--gold)';
   else el.style.color = 'var(--accent2)';
-}
-
-async function refreshPlayer() {
-  if (!currentPlayer) return;
-  try {
-    const data = await apiGet(`/api/player/${currentPlayer.roblox_id}`);
-    if (!data.error) {
-      updateUI(data);
-      loadSharedTimer();
-      showToast('✅ 資料已更新！');
-    }
-  } catch(e) {
-    showToast('連線失敗', 'error');
-  }
 }
 
 async function loadSharedTimer() {
