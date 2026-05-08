@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>加班台控制面板</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.5/socket.io.min.js"></script>
 <style>
   :root {
     --bg: #0a0a0f;
@@ -972,6 +973,30 @@ async function loadRobux() {
     document.getElementById('robux-time').textContent     = data.recorded_at;
   } catch {}
 }
+
+// ── WebSocket 即時計時器 ──────────────────────────────────
+const socket = io(API, {
+  transports: ['websocket', 'polling'],
+  reconnectionAttempts: 10,
+  reconnectionDelay: 2000,
+});
+
+socket.on('connect', () => {
+  console.log('✅ WebSocket 已連線');
+});
+
+socket.on('timer_update', (data) => {
+  updateSharedTimer(data.time_seconds, data.time_formatted);
+});
+
+socket.on('disconnect', () => {
+  console.log('⚠️ WebSocket 斷線，嘗試重連...');
+});
+
+// WebSocket 斷線時 fallback 每5秒輪詢
+socket.on('connect_error', () => {
+  setTimeout(() => { if (currentPlayer) loadSharedTimer(); }, 5000);
+});
 
 loadRobux();
 </script>
