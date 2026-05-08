@@ -384,7 +384,7 @@
       <h2>輸入你的 Roblox ID</h2>
       <p>輸入你在 Roblox 的用戶 ID 來查看你的時間、token 和 VIP 狀態。</p>
       <div class="input-group">
-        <input type="text" id="roblox-id-input" placeholder="Roblox 用戶 ID（例如：123456789）" />
+        <input type="text" id="roblox-id-input" placeholder="Roblox 用戶名或數字 ID" />
       </div>
       <button class="btn btn-primary" onclick="login()">進入面板</button>
     </div>
@@ -582,9 +582,15 @@ function updateUI(player) {
 
 
 async function login() {
-  const id = document.getElementById('roblox-id-input').value.trim();
-  if (!id) return showToast('請輸入 Roblox ID', 'error');
+  let id = document.getElementById('roblox-id-input').value.trim();
+  if (!id) return showToast('請輸入 Roblox 用戶名或 ID', 'error');
   try {
+    // 如果不是純數字，先查詢 Roblox 用戶名轉 ID
+    if (!/^\d+$/.test(id)) {
+      const lookup = await apiGet(`/api/lookup_user?username=${encodeURIComponent(id)}`);
+      if (lookup.error) return showToast(lookup.error || '找不到此用戶名', 'error');
+      id = lookup.roblox_id;
+    }
     // 嘗試取得玩家，找不到就自動建立
     let data = await apiGet(`/api/player/${id}`);
     if (data.error) {
