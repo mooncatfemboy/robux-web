@@ -672,6 +672,20 @@ function updateSharedTimer(seconds, formatted) {
   else el.style.color = 'var(--accent2)';
 }
 
+async function refreshPlayer() {
+  if (!currentPlayer) return;
+  try {
+    const data = await apiGet(`/api/player/${currentPlayer.roblox_id}`);
+    if (!data.error) {
+      updateUI(data);
+      loadSharedTimer();
+      showToast('✅ 資料已更新！');
+    }
+  } catch(e) {
+    showToast('連線失敗', 'error');
+  }
+}
+
 async function loadSharedTimer() {
   try {
     const data = await apiGet('/api/shared_timer');
