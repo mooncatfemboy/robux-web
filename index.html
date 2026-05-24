@@ -332,10 +332,7 @@
 <header>
   <div class="container header-inner">
     <div class="logo">加班台 <span>CTRL</span></div>
-    <div class="robux-badge">
-      <span class="dot"></span>
-      <span id="header-robux">載入中...</span>
-    </div>
+
   </div>
 </header>
 
@@ -432,36 +429,37 @@
 
     </div>
 
-    <div class="section-title">Group Robux 收益</div>
-    <div class="robux-section">
-      <div style="display:flex;align-items:center;justify-content:space-between">
-        <div style="font-size:14px;color:var(--muted)">最後更新：<span id="robux-time">—</span></div>
-      </div>
-      <div class="robux-row">
-        <div class="robux-item pending">
-          <div class="label">待處理</div>
-          <div class="value" id="robux-pending">—</div>
-          <div style="font-size:11px;color:var(--muted);margin-top:4px">R$</div>
-        </div>
-        <div class="robux-item cleared">
-          <div class="label">已處理</div>
-          <div class="value" id="robux-cleared">—</div>
-          <div style="font-size:11px;color:var(--muted);margin-top:4px">R$</div>
-        </div>
-        <div class="robux-item total">
-          <div class="label">合計</div>
-          <div class="value" id="robux-total">—</div>
-          <div style="font-size:11px;color:var(--muted);margin-top:4px">R$</div>
-        </div>
-      </div>
-    </div>
-
     <!-- ADMIN PANEL -->
     <div id="admin-panel" style="display:none">
 
       <div class="admin-section-title">
         <span>🔧</span> 管理員面板
         <span style="margin-left:auto;font-size:11px;color:rgba(255,77,109,0.6);letter-spacing:1px">ADMIN ONLY</span>
+      </div>
+
+      <!-- Robux (admin only) -->
+      <div class="robux-section" style="margin-bottom:20px;border-color:rgba(255,77,109,0.25)">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <div style="font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted)">💰 Group Robux 收益</div>
+          <div style="font-size:13px;color:var(--muted)">最後更新：<span id="robux-time">—</span></div>
+        </div>
+        <div class="robux-row">
+          <div class="robux-item pending">
+            <div class="label">待處理</div>
+            <div class="value" id="robux-pending">—</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:4px">R$</div>
+          </div>
+          <div class="robux-item cleared">
+            <div class="label">已處理</div>
+            <div class="value" id="robux-cleared">—</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:4px">R$</div>
+          </div>
+          <div class="robux-item total">
+            <div class="label">合計</div>
+            <div class="value" id="robux-total">—</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:4px">R$</div>
+          </div>
+        </div>
       </div>
 
       <div class="admin-grid">
